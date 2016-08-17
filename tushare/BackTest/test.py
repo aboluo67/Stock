@@ -1,3 +1,6 @@
-import tick
+a = '+'
+b = '-'
+print a*8
+print b*6
 
-print tick.tick.index('600038')
+print 2880/140

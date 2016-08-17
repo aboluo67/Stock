@@ -7,7 +7,7 @@ sys.setdefaultencoding('utf8')
 import os
 import time
 import sys
-import tick
+from tushare import tick
 import schedule
 from pymongo import MongoClient
 
@@ -82,5 +82,5 @@ for ticki in tick.tick:
                             f.write(str(data[i]['JYDM'])+' '+str(data[i]['JYR'])+' '+str(data[i+3]['price_change'])+'\n')
                             print ('----------------')
     del data[:]
-    print '\r','进度 :',tick.tick.index(ticki),'/',ticklen,
+    print '\r','进度 :', tick.tick.index(ticki), '/',ticklen,
     sys.stdout.flush()
