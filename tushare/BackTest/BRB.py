@@ -11,36 +11,12 @@ import tick
 import schedule
 from pymongo import MongoClient
 
-report_time = time.strftime("%Y-%m-%d %H时%M分", time.localtime())
-
-# MAC
-# report_address = '/Users/zoutao/Report/'+report_time+'-每日复盘/两红夹一黑.txt'
-# if os.path.exists('/Users/zoutao/Report/'+report_time+'-每日复盘'):
-#     message = 'file exists.'
-#     print message
-# else:
-#     os.makedirs('/Users/zoutao/Report/'+report_time+'-每日复盘')
-#     print 'Created Report '+report_time+'-每日复盘'
-
-# ubuntu
-report_address = '/home/feheadline/PycharmProjects/Report/'+report_time+' 每日复盘/两红夹一黑.txt'
-if os.path.exists('/home/feheadline/PycharmProjects/Report/'+report_time+' 每日复盘'):
-    message = 'file exists.'
-    print message
-else:
-    os.makedirs('/home/feheadline/PycharmProjects/Report/'+report_time+' 每日复盘')
-    print 'Created Report '+report_time+' 每日复盘'
-
-f = open(report_address, 'a+')
-f.write('两红夹一黑\n')
-f.write(report_time + '\n')
-
 conn = MongoClient('localhost',27017)
 
 #----------------------------------------------------------
 #---------------------此处修改参数---------------------------
 
-db = conn.tushare.data0812
+db = conn.db.data08
 start = '2016-08-08'
 span = 5
 data = []
@@ -65,7 +41,7 @@ ticklen = len(tick.tick)
 
 for ticki in tick.tick:
     for i in range(0,span):
-        for item in db.find({'JYR':datalist[i], 'JYDM':ticki}):
+        for item in db.find({'dt':datalist[i], 'tick':ticki}):
             data.append(item)
     for i in range(len(data)-3):
         if data[i]['ma10'] != None and data[i]['ma20'] != None:
@@ -75,11 +51,8 @@ for ticki in tick.tick:
                         if data[i]['open'] < (data[i + 1]['close']) and (data[i + 1]['close']) > data[i + 2]['open']:
                             count += 1
                             print ''
-                            f.write('\n')
                             print 'No.', count
-                            f.write('No.'+ str(count) +'\n')
-                            print data[i]['JYDM'], data[i]['JYR'],data[i+3]['price_change']
-                            f.write(str(data[i]['JYDM'])+' '+str(data[i]['JYR'])+' '+str(data[i+3]['price_change'])+'\n')
+                            print data[i]['tick'], data[i]['dt'],data[i+3]['price_change']
                             print ('----------------')
     del data[:]
     print '\r','进度 :',tick.tick.index(ticki),'/',ticklen,

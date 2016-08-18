@@ -10,6 +10,29 @@ import sys
 import tick
 import schedule
 from pymongo import MongoClient
+report_time = time.strftime("%Y-%m-%d %H时%M分", time.localtime())
+
+# MAC
+# report_address = '/Users/zoutao/Report/'+report_time+'-每日复盘/跳空下跌三颗星.txt'
+# if os.path.exists('/Users/zoutao/Report/'+report_time+'-每日复盘'):
+#     message = 'file exists.'
+#     print message
+# else:
+#     os.makedirs('/Users/zoutao/Report/'+report_time+'-每日复盘')
+#     print 'Created Report '+report_time+'-每日复盘'
+
+# ubuntu
+report_address = '/home/feheadline/PycharmProjects/Report/'+report_time+' 每日复盘/跳空下跌三颗星.txt'
+if os.path.exists('/home/feheadline/PycharmProjects/Report/'+report_time+' 每日复盘'):
+    message = 'file exists.'
+    print message
+else:
+    os.makedirs('/home/feheadline/PycharmProjects/Report/'+report_time+' 每日复盘')
+    print 'Created Report '+report_time+' 每日复盘'
+
+f = open(report_address, 'a+')
+f.write('跳空下跌三颗星\n')
+f.write(report_time + '\n')
 conn = MongoClient('localhost',27017)
 
 #----------------------------------------------------------
@@ -43,8 +66,8 @@ for ticki in tick.tick:
         for item in db.find({'dt':datalist[i], 'tick':ticki}):
             data.append(item)
     for i in range(len(data)-1):
-        print (1-round(data[i]['open']*1.0/data[i]['close'],2))
-        if (1-round(data[i]['open']*1.0/data[i]['close'],2)) < -0.03 and\
+        print (1-round(data[i]['open']/data[i]['close'],2))
+        if (1-round(data[i]['open']/data[i]['close'],2)) < -0.03 and\
             data[i+1]['open']>data[i+1]['close'] and data[i+2]['open']>data[i+2]['close'] and data[i+3]['open']>data[i+3]['close'] and\
                 data[i+1]['open']<data[i]['low'] and data[i+2]['open']<data[i]['low'] and data[i+3]['open']<data[i]['low']:
                     print ''

@@ -13,7 +13,7 @@ ticklen = len(tick.tick)
 
 db = conn.db.data08
 start = '2016-08-08'
-span = 5
+span = 2
 
 #----------------------------------------------------------
 #---------------------此处修改参数---------------------------
@@ -36,8 +36,10 @@ for ticki in tick.tick:
             data.append(item)
     if data != []:
         try:
+            # print len(data)
+            # print data[0]['tick'],data[0]['dt'], data[1]['dt']
             for i in range(len(data)):
-                if data[i]['close'] > ((data[i]['ma10'] + data[i]['ma20'])*1.0 / 2):
+                if data[i]['close'] > ((data[i]['ma10'] + data[i]['ma20']) / 2):
                     if len(data) == span:
                         data2.append(data[i])
             if len(data2) == span:
@@ -45,11 +47,11 @@ for ticki in tick.tick:
                 print ''
                 # print i
                 print 'No.', count
-                print data2[i]['tick'], data2[i]['dt']
-                print 'MA15:', ((data2[i]['ma10'] + data2[i]['ma20']) / 2), \
-                    ' Close:', (data2[i]['close']), ' 系数比:', \
-                    round(((data2[i]['close'] - ((data2[i]['ma10'] + data2[i]['ma20']) / 2)) / (
-                    (data2[i]['ma10'] + data2[i]['ma20']) / 2)) * 100, 2)
+                print data2[0]['tick'], data2[0]['dt']
+                print 'MA15:', ((data2[0]['ma10'] + data2[0]['ma20']) / 2), \
+                    ' Close:', (data2[0]['close']), ' 系数比:', \
+                    round(((data2[0]['close'] - ((data2[0]['ma10'] + data2[0]['ma20']) / 2)) / (
+                    (data2[0]['ma10'] + data2[0]['ma20']) / 2)) * 100, 2)
                 # 系数比 (close-ma15)/ma15
                 counti.append(count)
                 del data2[:]

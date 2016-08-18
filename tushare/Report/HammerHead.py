@@ -11,6 +11,29 @@ import sys
 import tick
 import schedule
 from pymongo import MongoClient
+report_time = time.strftime("%Y-%m-%d %H时%M分", time.localtime())
+
+# MAC
+# report_address = '/Users/zoutao/Report/'+report_time+'-每日复盘/锤头线.txt'
+# if os.path.exists('/Users/zoutao/Report/'+report_time+'-每日复盘'):
+#     message = 'file exists.'
+#     print message
+# else:
+#     os.makedirs('/Users/zoutao/Report/'+report_time+'-每日复盘')
+#     print 'Created Report '+report_time+'-每日复盘'
+
+# ubuntu
+report_address = '/home/feheadline/PycharmProjects/Report/'+report_time+' 每日复盘/锤头线.txt'
+if os.path.exists('/home/feheadline/PycharmProjects/Report/'+report_time+' 每日复盘'):
+    message = 'file exists.'
+    print message
+else:
+    os.makedirs('/home/feheadline/PycharmProjects/Report/'+report_time+' 每日复盘')
+    print 'Created Report '+report_time+' 每日复盘'
+
+f = open(report_address, 'a+')
+f.write('锤头线\n')
+f.write(report_time + '\n')
 conn = MongoClient('localhost',27017)
 
 #-----------------------------------------------------------
@@ -47,39 +70,55 @@ for ticki in tick.tick:
         # 收阳
         if data[i]['close']>data[i]['open']:
             if (data[i]['high']/data[i]['open'])/(data[i]['close']/data[i]['open'])>1.05:
-                count +=1
+                count += 1
                 print ''
-                print 'No: ', count
+                f.write('\n')
+                print 'No: ',count
+                f.write('No:'+ str(count) + '\n')
                 print '倒锤头线-红'
+                f.write('倒锤头线-红\n')
                 print data[i]['tick'],data[i]['dt']
+                f.write(str(data[i]['tick'])+ str(data[i]['dt']) + '\n')
                 print ('----------------')
-        # 收阴
+            # 收阴
         if data[i]['close']<data[i]['open']:
             if (data[i]['high']/data[i]['close'])/(data[i]['open']/data[i]['close'])>1.05:
-                count +=1
+                count += 1
                 print ''
+                f.write('\n')
                 print 'No: ', count
+                f.write('No:' + str(count) + '\n')
                 print '倒锤头线-绿'
-                print data[i]['tick'],data[i]['dt']
+                f.write('倒锤头线-绿\n')
+                print data[i]['tick'], data[i]['dt']
+                f.write(str(data[i]['tick']) + str(data[i]['dt']) + '\n')
                 print ('----------------')
 
         if data[i]['close']>data[i]['open']:
             if (data[i]['open']/data[i]['low'])/(data[i]['open']/data[i]['close'])<1.04:
-                count +=1
+                count += 1
                 print ''
-                print 'No: ', count
-                print '锤头线-红'
+                f.write('\n')
+                print 'No: ',count
+                f.write('No:'+ str(count) + '\n')
+                print '倒锤头线-红'
+                f.write('倒锤头线-红\n')
                 print data[i]['tick'],data[i]['dt']
+                f.write(str(data[i]['tick'])+ str(data[i]['dt']) + '\n')
                 print ('----------------')
 
         if data[i]['close']<data[i]['open']:
             if (data[i]['close']/data[i]['low'])/(data[i]['close']/data[i]['open'])<1.04:
                 count +=1
                 print ''
+                f.write('\n')
                 print 'No: ', count
-                print '锤头线-绿'
-                print data[i]['tick'],data[i]['dt']
+                f.write('No:' + str(count) + '\n')
+                print '倒锤头线-绿'
+                f.write('倒锤头线-绿\n')
+                print data[i]['tick'], data[i]['dt']
+                f.write(str(data[i]['tick']) + str(data[i]['dt']) + '\n')
                 print ('----------------')
     del data[:]
-    print '\r', '进度 :', tick.tick.index(ticki), '/', ticklen,
+    print '\r','进度 :',tick.tick.index(ticki),'/',ticklen,
     sys.stdout.flush()

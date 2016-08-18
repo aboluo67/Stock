@@ -16,7 +16,7 @@ conn = MongoClient('localhost',27017)
 #---------------------此处修改参数---------------------------
 
 db = conn.db.data08
-start = '2016-08-08'
+start = '2016-08-09'
 span = 5
 data = []
 datalist = []
